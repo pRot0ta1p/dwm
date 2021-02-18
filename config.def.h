@@ -16,10 +16,26 @@ static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
+static const char col1[]            = "#ffffff";
+static const char col2[]            = "#ffffff";
+static const char col3[]            = "#ffffff";
+static const char col4[]            = "#ffffff";
+static const char col5[]            = "#ffffff";
+static const char col6[]            = "#ffffff";
+
+enum { SchemeNorm, SchemeCol1, SchemeCol2, SchemeCol3, SchemeCol4,
+       SchemeCol5, SchemeCol6, SchemeSel }; /* color schemes */
+
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeNorm]  = { col_gray3, col_gray1, col_gray2 },
+	[SchemeCol1]  = { col1,      col_gray1, col_gray2 },
+	[SchemeCol2]  = { col2,      col_gray1, col_gray2 },
+	[SchemeCol3]  = { col3,      col_gray1, col_gray2 },
+	[SchemeCol4]  = { col4,      col_gray1, col_gray2 },
+	[SchemeCol5]  = { col5,      col_gray1, col_gray2 },
+	[SchemeCol6]  = { col6,      col_gray1, col_gray2 },
+	[SchemeSel]   = { col_gray4, col_cyan,  col_cyan  },
 };
 
 /* tagging */
@@ -63,6 +79,8 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
 static const char *termcmd[]  = { "st", NULL };
 
+#include "selfrestart.c"
+
 static Key keys[] = {
 	/* modifier                     chain key   key        function        argument */
 	{ MODKEY,                       -1,         XK_p,      spawn,          {.v = dmenucmd } },
@@ -97,6 +115,7 @@ static Key keys[] = {
 	TAGKEYS(                        -1,         XK_7,                      6)
 	TAGKEYS(                        -1,         XK_8,                      7)
 	TAGKEYS(                        -1,         XK_9,                      8)
+    { MODKEY|ShiftMask,             -1,         XK_r,      self_restart,   {0} },
 	{ MODKEY|ShiftMask,             -1,         XK_q,      quit,           {0} },
 	{ MODKEY,                       XK_a,       XK_d,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_a,       XK_t,      spawn,          {.v = termcmd } },
@@ -109,7 +128,9 @@ static Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
+	{ ClkStatusText,        0,              Button1,        sigdwmblocks,   {.i = 1} },
+	{ ClkStatusText,        0,              Button2,        sigdwmblocks,   {.i = 2} },
+	{ ClkStatusText,        0,              Button3,        sigdwmblocks,   {.i = 3} },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
 	{ ClkClientWin,         MODKEY,         Button3,        resizemouse,    {0} },
@@ -118,4 +139,3 @@ static Button buttons[] = {
 	{ ClkTagBar,            MODKEY,         Button1,        tag,            {0} },
 	{ ClkTagBar,            MODKEY,         Button3,        toggletag,      {0} },
 };
-
