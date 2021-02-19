@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
@@ -12,11 +12,17 @@ static const int topbar             = 0;        /* 0 means bottom bar */
 static const char *fonts[]          = { "Siji:pixelsize=16",
                                         "WenQuanYi Micro Hei Mono:pixelsize=16:antialias=true:autohint=true" };
 static const char dmenufont[]       = "monospace:size=14";
+static const char norm_fg[] = "#e2e8ef";
+static const char norm_bg[] = "#0E2B41";
+static const char norm_border[] = "#9ea2a7";
+static const char sel_fg[] = "#e2e8ef";
+static const char sel_bg[] = "#78A7D3";
+static const char sel_border[] = "#e2e8ef";
 static const char col_gray1[]       = "#282828";
 static const char col_gray2[]       = "#282828";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
-static const char col_cyan[]        = "#006AFF";
+static const char col_cyan[]        = "#6F95C3";
 static const char col1[]            = "#ffffff";
 static const char col2[]            = "#ffffff";
 static const char col3[]            = "#ffffff";
@@ -29,8 +35,8 @@ enum { SchemeNorm, SchemeCol1, SchemeCol2, SchemeCol3, SchemeCol4,
 
 static const char *colors[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray4, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+    [SchemeNorm] = { norm_fg,     norm_bg,   norm_border }, // unfocused wins
+    [SchemeSel]  = { sel_fg,      sel_bg,    sel_border },  // the focused win
 	[SchemeCol1]  = { col1,      col_gray1, col_gray2 },
 	[SchemeCol2]  = { col2,      col_gray1, col_gray2 },
 	[SchemeCol3]  = { col3,      col_gray1, col_gray2 },
