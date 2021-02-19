@@ -101,6 +101,7 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "st", NULL };
 
 #include "selfrestart.c"
+#include "shiftview.c"
 
 static Key keys[] = {
 	/* modifier                     chain key   key        function        argument */
@@ -134,6 +135,7 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask,              -1,         XK_0,      togglegaps,     {0} },
 	{ MODKEY|Mod4Mask|ShiftMask,    -1,         XK_0,      defaultgaps,    {0} },
 	{ MODKEY,                       -1,         XK_Tab,    view,           {0} },
+	{ MODKEY|ShiftMask,	            -1,         XK_Tab,        shiftview,      { .i = 1 } },
 	{ MODKEY|ShiftMask,             -1,         XK_c,      killclient,     {0} },
 	{ MODKEY,                       -1,         XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       -1,         XK_f,      setlayout,      {.v = &layouts[1]} },

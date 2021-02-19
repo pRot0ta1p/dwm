@@ -113,6 +113,7 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "st", NULL };
 
 #include "selfrestart.c"
+#include "shiftview.c"
 
 static Key keys[] = {
 	/* modifier                    chain key   key        function        argument */
@@ -134,22 +135,22 @@ static Key keys[] = {
 	{ MODKEY|Mod1Mask,              -1,         XK_t,          togglegaps,     {0} },
 	{ MODKEY|Mod1Mask,              -1,         XK_0,          defaultgaps,    {0} },
 	{ MODKEY,                       -1,         XK_Tab,        view,           {0} },
+	{ MODKEY|ShiftMask,	            -1,         XK_Tab,        shiftview,      { .i = 1 } },
 	{ MODKEY,                       -1,         XK_q,          killclient,     {0} },
 	{ MODKEY,                     XK_t,         XK_1,          setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                     XK_t,         XK_2,          setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                     XK_t,         XK_3,          setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                     XK_t,         XK_4,      setlayout,      {.v = &layouts[3]} },
+	{ MODKEY,                     XK_t,         XK_4,          setlayout,      {.v = &layouts[3]} },
 	{ MODKEY,                     XK_t,         XK_5,          setlayout,      {.v = &layouts[4]} },
 	{ MODKEY,                     XK_t,         XK_6,          setlayout,      {.v = &layouts[5]} },
 	{ MODKEY,                     XK_t,         XK_7,          setlayout,      {.v = &layouts[6]} },
 	{ MODKEY,                     XK_t,         XK_8,          setlayout,      {.v = &layouts[7]} },
 	{ MODKEY,                     XK_t,         XK_9,          setlayout,      {.v = &layouts[8]} },
 	{ MODKEY,                     XK_t,         XK_0,          setlayout,      {.v = &layouts[9]} },
-	{ MODKEY,                     XK_t,         XK_a,      setlayout,      {.v = &layouts[10]} },
+	{ MODKEY,                     XK_t,         XK_a,          setlayout,      {.v = &layouts[10]} },
 	{ MODKEY,                     XK_t,         XK_s,          setlayout,      {.v = &layouts[11]} },
 	{ MODKEY,                     XK_t,         XK_d,          setlayout,      {.v = &layouts[12]} },
 	{ MODKEY,                     XK_t,         XK_f,          setlayout,      {.v = &layouts[13]} },
-	{ MODKEY,                       -1,         XK_space,      setlayout,      {0} },
 	{ MODKEY|ShiftMask,             -1,         XK_space,      togglefloating, {0} },
 	{ MODKEY,                       -1,         XK_0,          view,           {.ui = ~0 } },
 	{ MODKEY|ShiftMask,             -1,         XK_0,          tag,            {.ui = ~0 } },
