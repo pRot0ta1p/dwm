@@ -1,5 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
+#define TERMINAL "st"
+#define TERMCLASS "St"
+
 /* appearance */
 static const unsigned int borderpx           = 3;        /* border pixel of windows */
 static const unsigned int snap               = 32;       /* snap pixel */
@@ -54,6 +57,16 @@ static const char *colors[][3]      = {
 	[SchemeCol6]  = { col6,      col_gray1, col_gray2 },
 };
 
+typedef struct {
+	const char *name;
+	const void *cmd;
+} Sp;
+const char *spcmd1[] = {TERMINAL , "-n", "spterm", "-g", "80x26", NULL };
+static Sp scratchpads[] = {
+	/* name          cmd  */
+	{"spterm",      spcmd1},
+ };
+
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
@@ -62,10 +75,11 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-	{ "Gimp",    NULL,     NULL,           1 << 8,    1,          0,           0,        -1 },
-	{ "St",      NULL,     NULL,           0,         0,          1,           0,        -1 },
-	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
+	/* class     instance       title              tags mask      isfloating  isterminal  noswallow  monitor */
+	{ "Gimp",    NULL,          NULL,              1 << 8,        1,          0,           0,        -1 },
+	{ "St",      NULL,          NULL,              0,             0,          1,           0,        -1 },
+	{ NULL,      NULL,          "Event Tester",    0,             0,          0,           1,        -1 }, /* xev */
+	{ NULL,		 "spterm",		NULL,		       SPTAG(0),	  1,		  1,           0,        -1 },
 };
 
 /* layout(s) */
@@ -163,6 +177,7 @@ static Key keys[] = {
 	{ MODKEY,                       -1,         XK_period,       focusmon,           {.i = +1 } },
 	{ MODKEY|ShiftMask,             -1,         XK_comma,        tagmon,             {.i = -1 } },
 	{ MODKEY|ShiftMask,             -1,         XK_period,       tagmon,             {.i = +1 } },
+	{ MODKEY,                       -1, 		XK_u,  	         togglescratch,      {.ui = 0 } },
 	TAGKEYS(                        -1,         XK_1,                        0)
 	TAGKEYS(                        -1,         XK_2,                        1)
 	TAGKEYS(                        -1,         XK_3,                        2)
