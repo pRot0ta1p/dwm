@@ -4,3 +4,4 @@ dwm.o
 util.o
 *.diff
 *.rej
+*.orig
