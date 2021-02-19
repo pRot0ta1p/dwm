@@ -4,7 +4,7 @@
 #define TERMCLASS "St"
 
 /* appearance */
-static const unsigned int borderpx           = 3;        /* border pixel of windows */
+static const unsigned int borderpx           = 4;        /* border pixel of windows */
 static const unsigned int snap               = 32;       /* snap pixel */
 static const unsigned int gappih             = 10;       /* horiz inner gap between windows */
 static const unsigned int gappiv             = 10;       /* vert inner gap between windows */
@@ -24,37 +24,42 @@ static const char *fonts[]                   = { "xos4 Terminus:size=14",
                                                  "WenQuanYi WenQuanYi Bitmap Song:size=14",
                                                  "monospace:size=14"};
 static const char dmenufont[]                = "monospace:size=14";
-static const char norm_fg[]                  = "#e2e8ef";
-static const char norm_bg[]                  = "#0E2B41";
-static const char norm_border[]              = "#9ea2a7";
-static const char sel_fg[]                   = "#e2e8ef";
-static const char sel_bg[]                   = "#78A7D3";
-static const char sel_border[]               = "#e2e8ef";
-static const char col_gray1[]                = "#282828";
-static const char col_gray2[]                = "#282828";
-static const char col_gray3[]                = "#bbbbbb";
-static const char col_gray4[]                = "#eeeeee";
-static const char col_cyan[]                 = "#6F95C3";
-static const char col1[]                     = "#ffffff";
-static const char col2[]                     = "#ffffff";
-static const char col3[]                     = "#ffffff";
-static const char col4[]                     = "#ffffff";
-static const char col5[]                     = "#ffffff";
-static const char col6[]                     = "#ffffff";
 
-enum { SchemeNorm, SchemeCol1, SchemeCol2, SchemeCol3, SchemeCol4,
-       SchemeCol5, SchemeCol6, SchemeSel }; /* color schemes */
+/* colors */
+static const char color0[]                     = "#0E2B41";
+static const char color1[]                     = "#6F95C3";
+static const char color2[]                     = "#78A7D3";
+static const char color3[]                     = "#8DA3B4";
+static const char color4[]                     = "#8DB4DE";
+static const char color5[]                     = "#A8C3DF";
+static const char color6[]                     = "#ADD0EC";
+static const char color7[]                     = "#e2e8ef";
+static const char color8[]                     = "#9ea2a7";
+static const char color9[]                     = "#6F95C3";
+static const char color10[]                    = "#78A7D3";
+static const char color11[]                    = "#8DA3B4";
+static const char color12[]                    = "#8DB4DE";
+static const char color13[]                    = "#A8C3DF";
+static const char color14[]                    = "#ADD0EC";
+static const char color15[]                    = "#e2e8ef";
+static const char colorgreen[]                 = "#8ec07c";
+static const char colormagenta[]               = "#d3869b";
+static const char colorwhite[]                 = "#ffffff";
+static const char colorblack[]                 = "#000000";
+
+enum { SchemeNorm, SchemeSel, SchemeCol1, SchemeCol2, SchemeCol3, SchemeCol4,
+       SchemeCol5, SchemeCol6 }; /* color schemes */
 
 static const char *colors[][3]      = {
-	/*               fg         bg         border   */
-    [SchemeNorm] = { norm_fg,     norm_bg,   norm_border }, // unfocused wins
-    [SchemeSel]  = { sel_fg,      sel_bg,    sel_border },  // the focused win
-	[SchemeCol1]  = { col1,      col_gray1, col_gray2 },
-	[SchemeCol2]  = { col2,      col_gray1, col_gray2 },
-	[SchemeCol3]  = { col3,      col_gray1, col_gray2 },
-	[SchemeCol4]  = { col4,      col_gray1, col_gray2 },
-	[SchemeCol5]  = { col5,      col_gray1, col_gray2 },
-	[SchemeCol6]  = { col6,      col_gray1, col_gray2 },
+	/*               fg             bg          border   */
+    [SchemeNorm]  = { color7,       color0,     color0 }, // unfocused wins
+    [SchemeSel]   = { color7,       color2,     colormagenta }, // the focused win
+	[SchemeCol1]  = { color7,       color0,     color8 },
+	[SchemeCol2]  = { color7,       color0,     color8 },
+	[SchemeCol3]  = { color7,       color0,     color8 },
+	[SchemeCol4]  = { color7,       color0,     color8 },
+	[SchemeCol5]  = { color7,       color0,     color8 },
+	[SchemeCol6]  = { color7,       color0,     color8 },
 };
 
 typedef struct {
@@ -75,11 +80,11 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class     instance       title              tags mask      isfloating  isterminal  noswallow  monitor */
-	{ "Gimp",    NULL,          NULL,              1 << 8,        1,          0,           0,        -1 },
-	{ "St",      NULL,          NULL,              0,             0,          1,           0,        -1 },
-	{ NULL,      NULL,          "Event Tester",    0,             0,          0,           1,        -1 }, /* xev */
-	{ NULL,		 "spterm",		NULL,		       SPTAG(0),	  1,		  1,           0,        -1 },
+	/* class       instance       title              tags mask      isfloating  isterminal  noswallow  monitor */
+	{ "Gimp",      NULL,          NULL,              1 << 8,        1,          0,           0,        -1 },
+	{ TERMCLASS,   NULL,          NULL,              0,             0,          1,           0,        -1 },
+	{ NULL,        NULL,          "Event Tester",    0,             0,          0,           1,        -1 }, /* xev */
+	{ NULL,		   "spterm",      NULL,		         SPTAG(0),	    1,          1,           0,        -1 }, /*scrath pad*/
 };
 
 /* layout(s) */
