@@ -139,6 +139,7 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask|ShiftMask,    -1,         XK_0,            defaultgaps,          {0} },
 	{ MODKEY,                       -1,         XK_Tab,          view,                 {0} },
 	{ MODKEY|ShiftMask,	            -1,         XK_Tab,          shiftview,            { .i = 1 } },
+	{ MODKEY|ControlMask,           -1,         XK_space,        focusmaster,          {0} },
 	{ MODKEY|ShiftMask,             -1,         XK_c,            killclient,           {0} },
 	{ MODKEY,                       -1,         XK_space,        setlayout,            {0} },
 	{ MODKEY|ShiftMask,             -1,         XK_f,            togglefullscr,        {0} },
