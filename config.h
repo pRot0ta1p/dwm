@@ -3,6 +3,11 @@
 /* appearance */
 static const unsigned int borderpx  = 3;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int gappih    = 10;       /* horiz inner gap between windows */
+static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
+static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov    = 10;       /* vert outer gap between windows and screen edge */
+static       int smartgaps          = 1;        /* 1 means no outer gap when there is only one window */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
@@ -61,15 +66,30 @@ static const Rule rules[] = {
 };
 
 /* layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
+static const float mfact     = 0.60; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+
+#define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
+#include "vanitygaps.c"
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "Tile",      tile },    /* first entry is default */
-	{ "Float",      NULL },    /* no layout function means floating behavior */
-	{ "Monocle",      monocle },
+	{ "[]=",      tile },    /* first entry is default */
+	{ "[M]",      monocle },
+	{ "[@]",      spiral },
+	{ "[\\]",     dwindle },
+	{ "H[]",      deck },
+	{ "TTT",      bstack },
+	{ "===",      bstackhoriz },
+	{ "HHH",      grid },
+	{ "###",      nrowgrid },
+	{ "---",      horizgrid },
+	{ ":::",      gaplessgrid },
+	{ "|M|",      centeredmaster },
+	{ ">M>",      centeredfloatingmaster },
+	{ "><>",      NULL },    /* no layout function means floating behavior */
+	{ NULL,       NULL },
 };
 
 /* key definitions */
@@ -96,40 +116,58 @@ static const char *termcmd[]  = { "st", NULL };
 
 static Key keys[] = {
 	/* modifier                    chain key   key        function        argument */
-	{ MODKEY,                      -1,         XK_r,      spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,            -1,         XK_Return, spawn,          {.v = termcmd } },
-	{ MODKEY,                      -1,         XK_b,      togglebar,      {0} },
-	{ MODKEY,                      -1,         XK_j,      focusstack,     {.i = +1 } },
-	{ MODKEY,                      -1,         XK_k,      focusstack,     {.i = -1 } },
-	{ MODKEY,                      -1,         XK_i,      incnmaster,     {.i = +1 } },
-	{ MODKEY,                      -1,         XK_d,      incnmaster,     {.i = -1 } },
-	{ MODKEY,                      -1,         XK_h,      setmfact,       {.f = -0.02} },
-	{ MODKEY,                      -1,         XK_l,      setmfact,       {.f = +0.02} },
-	{ MODKEY,                      -1,         XK_Return, zoom,           {0} },
-	{ MODKEY,                      -1,         XK_Tab,    view,           {0} },
-	{ MODKEY,                      -1,         XK_q,      killclient,     {0} },
-	{ MODKEY,                      -1,         XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                      -1,         XK_f,      setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                      -1,         XK_m,      setlayout,      {.v = &layouts[2]} },
-	{ MODKEY,                      -1,         XK_space,  setlayout,      {0} },
-	{ MODKEY|ShiftMask,            -1,         XK_space,  togglefloating, {0} },
-	{ MODKEY,                      -1,         XK_0,      view,           {.ui = ~0 } },
-	{ MODKEY|ShiftMask,            -1,         XK_0,      tag,            {.ui = ~0 } },
-	{ MODKEY,                      -1,         XK_comma,  focusmon,       {.i = -1 } },
-	{ MODKEY,                      -1,         XK_period, focusmon,       {.i = +1 } },
-	{ MODKEY|ShiftMask,            -1,         XK_comma,  tagmon,         {.i = -1 } },
-	{ MODKEY|ShiftMask,            -1,         XK_period, tagmon,         {.i = +1 } },
-	TAGKEYS(                       -1,         XK_1,                      0)
-	TAGKEYS(                       -1,         XK_2,                      1)
-	TAGKEYS(                       -1,         XK_3,                      2)
-	TAGKEYS(                       -1,         XK_4,                      3)
-	TAGKEYS(                       -1,         XK_5,                      4)
-	TAGKEYS(                       -1,         XK_6,                      5)
-	TAGKEYS(                       -1,         XK_7,                      6)
-	TAGKEYS(                       -1,         XK_8,                      7)
-	TAGKEYS(                       -1,         XK_9,                      8)
-    { MODKEY|ShiftMask,            -1,         XK_r,      self_restart,   {0} },
-	{ MODKEY|ShiftMask,            -1,         XK_e,      quit,           {0} },
+	{ MODKEY,                       -1,         XK_r,          spawn,          {.v = dmenucmd } },
+	{ MODKEY|ShiftMask,             -1,         XK_Return,     spawn,          {.v = termcmd } },
+	{ MODKEY,                       -1,         XK_b,          togglebar,      {0} },
+	{ MODKEY,                       -1,         XK_j,          focusstack,     {.i = +1 } },
+	{ MODKEY,                       -1,         XK_k,          focusstack,     {.i = -1 } },
+	{ MODKEY,                       -1,         XK_i,          incnmaster,     {.i = +1 } },
+	{ MODKEY,                       -1,         XK_d,          incnmaster,     {.i = -1 } },
+	{ MODKEY,                       -1,         XK_h,          setmfact,       {.f = -0.02} },
+	{ MODKEY,                       -1,         XK_l,          setmfact,       {.f = +0.02} },
+	{ MODKEY|ShiftMask,             -1,         XK_j,          setcfact,       {.f = +0.25} },
+	{ MODKEY|ShiftMask,             -1,         XK_k,          setcfact,       {.f = -0.25} },
+	{ MODKEY|ShiftMask,             -1,         XK_o,          setcfact,       {.f =  0.00} },
+	{ MODKEY,                       -1,         XK_Return,     zoom,           {0} },
+	{ MODKEY|Mod1Mask,              -1,         XK_j,          incrgaps,       {.i = +1 } },
+	{ MODKEY|Mod1Mask,              -1,         XK_k,          incrgaps,       {.i = -1 } },
+	{ MODKEY|Mod1Mask,              -1,         XK_t,          togglegaps,     {0} },
+	{ MODKEY|Mod1Mask,              -1,         XK_0,          defaultgaps,    {0} },
+	{ MODKEY,                       -1,         XK_Tab,        view,           {0} },
+	{ MODKEY,                       -1,         XK_q,          killclient,     {0} },
+	{ MODKEY,                     XK_t,         XK_1,          setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                     XK_t,         XK_2,          setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                     XK_t,         XK_3,          setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,                     XK_t,         XK_4,      setlayout,      {.v = &layouts[3]} },
+	{ MODKEY,                     XK_t,         XK_5,          setlayout,      {.v = &layouts[4]} },
+	{ MODKEY,                     XK_t,         XK_6,          setlayout,      {.v = &layouts[5]} },
+	{ MODKEY,                     XK_t,         XK_7,          setlayout,      {.v = &layouts[6]} },
+	{ MODKEY,                     XK_t,         XK_8,          setlayout,      {.v = &layouts[7]} },
+	{ MODKEY,                     XK_t,         XK_9,          setlayout,      {.v = &layouts[8]} },
+	{ MODKEY,                     XK_t,         XK_0,          setlayout,      {.v = &layouts[9]} },
+	{ MODKEY,                     XK_t,         XK_a,      setlayout,      {.v = &layouts[10]} },
+	{ MODKEY,                     XK_t,         XK_s,          setlayout,      {.v = &layouts[11]} },
+	{ MODKEY,                     XK_t,         XK_d,          setlayout,      {.v = &layouts[12]} },
+	{ MODKEY,                     XK_t,         XK_f,          setlayout,      {.v = &layouts[13]} },
+	{ MODKEY,                       -1,         XK_space,      setlayout,      {0} },
+	{ MODKEY|ShiftMask,             -1,         XK_space,      togglefloating, {0} },
+	{ MODKEY,                       -1,         XK_0,          view,           {.ui = ~0 } },
+	{ MODKEY|ShiftMask,             -1,         XK_0,          tag,            {.ui = ~0 } },
+	{ MODKEY,                       -1,         XK_comma,      focusmon,       {.i = -1 } },
+	{ MODKEY,                       -1,         XK_period,     focusmon,       {.i = +1 } },
+	{ MODKEY|ShiftMask,             -1,         XK_comma,      tagmon,         {.i = -1 } },
+	{ MODKEY|ShiftMask,             -1,         XK_period,     tagmon,         {.i = +1 } },
+	TAGKEYS(                        -1,         XK_1,                      0)
+	TAGKEYS(                        -1,         XK_2,                      1)
+	TAGKEYS(                        -1,         XK_3,                      2)
+	TAGKEYS(                        -1,         XK_4,                      3)
+	TAGKEYS(                        -1,         XK_5,                      4)
+	TAGKEYS(                        -1,         XK_6,                      5)
+	TAGKEYS(                        -1,         XK_7,                      6)
+	TAGKEYS(                        -1,         XK_8,                      7)
+	TAGKEYS(                        -1,         XK_9,                      8)
+    { MODKEY|ShiftMask,             -1,         XK_r,          self_restart,   {0} },
+	{ MODKEY|ShiftMask,             -1,         XK_e,          quit,           {0} },
 };
 
 /* button definitions */

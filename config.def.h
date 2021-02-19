@@ -3,6 +3,11 @@
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const unsigned int gappih    = 20;       /* horiz inner gap between windows */
+static const unsigned int gappiv    = 10;       /* vert inner gap between windows */
+static const unsigned int gappoh    = 10;       /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov    = 30;       /* vert outer gap between windows and screen edge */
+static       int smartgaps          = 0;        /* 1 means no outer gap when there is only one window */
 static const unsigned int systraypinning = 0;   /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
 static const unsigned int systrayspacing = 2;   /* systray spacing */
 static const int systraypinningfailfirst = 1;   /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
@@ -57,11 +62,26 @@ static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] 
 static const int nmaster     = 1;    /* number of clients in master area */
 static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
 
+#define FORCE_VSPLIT 1  /* nrowgrid layout: force two clients to always split vertically */
+#include "vanitygaps.c"
+
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
+	{ "[@]",      spiral },
+	{ "[\\]",     dwindle },
+	{ "H[]",      deck },
+	{ "TTT",      bstack },
+	{ "===",      bstackhoriz },
+	{ "HHH",      grid },
+	{ "###",      nrowgrid },
+	{ "---",      horizgrid },
+	{ ":::",      gaplessgrid },
+	{ "|M|",      centeredmaster },
+	{ ">M>",      centeredfloatingmaster },
+	{ "><>",      NULL },    /* no layout function means floating behavior */
+	{ NULL,       NULL },
 };
 
 /* key definitions */
@@ -93,7 +113,26 @@ static Key keys[] = {
 	{ MODKEY,                       -1,         XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       -1,         XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       -1,         XK_l,      setmfact,       {.f = +0.05} },
+	{ MODKEY|ShiftMask,             -1,         XK_h,      setcfact,       {.f = +0.25} },
+	{ MODKEY|ShiftMask,             -1,         XK_l,      setcfact,       {.f = -0.25} },
+	{ MODKEY|ShiftMask,             -1,         XK_o,      setcfact,       {.f =  0.00} },
 	{ MODKEY,                       -1,         XK_Return, zoom,           {0} },
+	{ MODKEY|Mod4Mask,              -1,         XK_u,      incrgaps,       {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    -1,         XK_u,      incrgaps,       {.i = -1 } },
+	{ MODKEY|Mod4Mask,              -1,         XK_i,      incrigaps,      {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    -1,         XK_i,      incrigaps,      {.i = -1 } },
+	{ MODKEY|Mod4Mask,              -1,         XK_o,      incrogaps,      {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    -1,         XK_o,      incrogaps,      {.i = -1 } },
+	{ MODKEY|Mod4Mask,              -1,         XK_6,      incrihgaps,     {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    -1,         XK_6,      incrihgaps,     {.i = -1 } },
+	{ MODKEY|Mod4Mask,              -1,         XK_7,      incrivgaps,     {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    -1,         XK_7,      incrivgaps,     {.i = -1 } },
+	{ MODKEY|Mod4Mask,              -1,         XK_8,      incrohgaps,     {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    -1,         XK_8,      incrohgaps,     {.i = -1 } },
+	{ MODKEY|Mod4Mask,              -1,         XK_9,      incrovgaps,     {.i = +1 } },
+	{ MODKEY|Mod4Mask|ShiftMask,    -1,         XK_9,      incrovgaps,     {.i = -1 } },
+	{ MODKEY|Mod4Mask,              -1,         XK_0,      togglegaps,     {0} },
+	{ MODKEY|Mod4Mask|ShiftMask,    -1,         XK_0,      defaultgaps,    {0} },
 	{ MODKEY,                       -1,         XK_Tab,    view,           {0} },
 	{ MODKEY|ShiftMask,             -1,         XK_c,      killclient,     {0} },
 	{ MODKEY,                       -1,         XK_t,      setlayout,      {.v = &layouts[0]} },
