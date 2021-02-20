@@ -26,40 +26,45 @@ static const char *fonts[]                   = { "xos4 Terminus:size=14",
 static const char dmenufont[]                = "monospace:size=14";
 
 /* colors */
-static const char color0[]                     = "#0E2B41";
-static const char color1[]                     = "#6F95C3";
-static const char color2[]                     = "#78A7D3";
-static const char color3[]                     = "#8DA3B4";
-static const char color4[]                     = "#8DB4DE";
-static const char color5[]                     = "#A8C3DF";
-static const char color6[]                     = "#ADD0EC";
-static const char color7[]                     = "#e2e8ef";
-static const char color8[]                     = "#9ea2a7";
-static const char color9[]                     = "#6F95C3";
-static const char color10[]                    = "#78A7D3";
-static const char color11[]                    = "#8DA3B4";
-static const char color12[]                    = "#8DB4DE";
-static const char color13[]                    = "#A8C3DF";
-static const char color14[]                    = "#ADD0EC";
-static const char color15[]                    = "#e2e8ef";
-static const char colorgreen[]                 = "#8ec07c";
-static const char colormagenta[]               = "#d3869b";
-static const char colorwhite[]                 = "#ffffff";
-static const char colorblack[]                 = "#000000";
+static const char color0[]                   = "#0E2B41";
+static const char color1[]                   = "#6F95C3";
+static const char color2[]                   = "#78A7D3";
+static const char color3[]                   = "#8DA3B4";
+static const char color4[]                   = "#8DB4DE";
+static const char color5[]                   = "#A8C3DF";
+static const char color6[]                   = "#ADD0EC";
+static const char color7[]                   = "#e2e8ef";
+static const char color8[]                   = "#9ea2a7";
+static const char color9[]                   = "#6F95C3";
+static const char color10[]                  = "#78A7D3";
+static const char color11[]                  = "#8DA3B4";
+static const char color12[]                  = "#8DB4DE";
+static const char color13[]                  = "#A8C3DF";
+static const char color14[]                  = "#ADD0EC";
+static const char color15[]                  = "#e2e8ef";
+static const char colorgreen[]               = "#8ec07c";
+static const char colormagenta[]             = "#d3869b";
+static const char colorred[]                 = "#fb4934";
+static const char coloryellow[]              = "#fabd2f";
+static const char colorblue[]                = "#83a598";
+static const char colorwhite[]               = "#ffffff";
+static const char colorblack[]               = "#000000";
 
 enum { SchemeNorm, SchemeSel, SchemeCol1, SchemeCol2, SchemeCol3, SchemeCol4,
-       SchemeCol5, SchemeCol6 }; /* color schemes */
+       SchemeCol5, SchemeCol6, SchemeCol7, SchemeCol8 }; /* color schemes */
 
 static const char *colors[][3]      = {
-	/*               fg             bg          border   */
-    [SchemeNorm]  = { color7,       color0,     color0 }, // unfocused wins
-    [SchemeSel]   = { color7,       color2,     colormagenta }, // the focused win
-	[SchemeCol1]  = { color7,       color0,     color8 },
-	[SchemeCol2]  = { color7,       color0,     color8 },
-	[SchemeCol3]  = { color7,       color0,     color8 },
-	[SchemeCol4]  = { color7,       color0,     color8 },
-	[SchemeCol5]  = { color7,       color0,     color8 },
-	[SchemeCol6]  = { color7,       color0,     color8 },
+  /*               fg             bg               border */         /* dwmblocks colors code*/
+    [SchemeNorm]  = { color7,       color0,        color0 },         /*  */
+    [SchemeSel]   = { color0,       color2,        colormagenta },   /*  */
+	[SchemeCol1]  = { color7,       colorgreen,    color8 },         /*  */
+	[SchemeCol2]  = { color7,       colormagenta,  color8 },         /*  */
+	[SchemeCol3]  = { color7,       colorred,      color8 },         /*  */
+	[SchemeCol4]  = { color7,       coloryellow,   color8 },         /*  */
+	[SchemeCol5]  = { color7,       colorblue,     color8 },         /*  */
+	[SchemeCol6]  = { color0,       colorwhite,    color8 },         /*  */
+	[SchemeCol7]  = { color7,       colorblack,    color8 },         /*  */
+	[SchemeCol8]  = { color7,       color0,        color8 },         /*  */
 };
 
 /* scratchpads configs */
