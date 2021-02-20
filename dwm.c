@@ -703,6 +703,8 @@ clientmessage(XEvent *e)
 			updatesystrayicongeom(c, wa.width, wa.height);
 			XAddToSaveSet(dpy, c->win);
 			XSelectInput(dpy, c->win, StructureNotifyMask | PropertyChangeMask | ResizeRedirectMask);
+			XClassHint ch = {"dwmsystray", "dwmsystray"};
+			XSetClassHint(dpy, c->win, &ch);
 			XReparentWindow(dpy, c->win, systray->win, 0, 0);
 			/* use parents background color */
 			swa.background_pixel  = scheme[SchemeNorm][ColBg].pixel;
@@ -962,7 +964,7 @@ drawbar(Monitor *m)
 		stp = ++stc;
 	  }
 	  drw_setscheme(drw, scheme[SchemeNorm]);
-	  drw_rect(drw, x, 0, 0, bh, 1, 1); /* set right padding 0 */
+	  drw_rect(drw, x, 0, wbar - x, bh, 1, 1); /* set right padding 0 */
 	}
 
 	for (c = m->clients; c; c = c->next) {
@@ -2565,11 +2567,11 @@ updatestatus(void)
                         else
                                 *(sts++) = *rst;
                 *stp = *stc = *sts = '\0';
-                wstext = TEXTW(stextp);
+                wstext = TEXTW(stextp) + RSPAD;
         } else {
                 strcpy(stextc, "dwm-"VERSION);
                 strcpy(stexts, stextc);
-                wstext = TEXTW(stextc);
+                wstext = TEXTW(stextc) + RSPAD;
         }
         drawbar(selmon);
 }
